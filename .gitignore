@@ -1,0 +1,44 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+
+results/
+scripts/analysis/comparison_analysis.executed.ipynb
+backup/
+
+# Local research data from every method
+data/
+results/
+dft_data/
+mace_medium_data/
+mace_polar_data/
+reaxff_data/
+trajectories/
+
+# Trajectory and model-result formats
+*.traj
+*.lammpstrj
+*_summary.json
+combined_summary*.json
+bonds.reax
+
+# Generated analysis artifacts
+figures/
+manuscript/manuscript.pdf
+MANIFEST.sha256
+
+manuscript/*.aux
+manuscript/*.bbl
+manuscript/*.blg
+manuscript/*.fdb_latexmk
+manuscript/*.fls
+manuscript/*.log
+manuscript/*.out
+manuscript/*.spl
+manuscript/*.synctex.gz
+manuscript/*.markdown.lua
+manuscript/_markdown_*/
+
+# Local publisher/reference source assets not redistributed in the public repo
+references/dft_literature/

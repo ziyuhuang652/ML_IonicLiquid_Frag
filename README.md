@@ -1,70 +1,64 @@
-# EMI-BF4 wall-collision benchmark
+# ML Ionic-Liquid Fragmentation Benchmark
 
-This repository contains a publication-ready benchmark of neutral
-EMI--BF4 wall-collision fragmentation for electrospray propulsion. The paper
-compares published DFT/MM and ReaxFF results with local MACE-medium and
-MACE-POLAR-1 workflows, focusing on product spectra, fragmentation onset,
-product families, and computational cost.
+Code and workflow utilities for benchmarking ionic-liquid wall-collision
+fragmentation with DFT/MM literature data, ReaxFF, MACE-medium, and
+MACE-POLAR-1. The repository is intended to hold reproducible scripts and clean
+workflow structure; large local datasets, raw trajectories, archived drafts,
+and manuscript files are not tracked.
 
-## Folder Structure
+![Performance benchmark](assets/performance_benchmark.png)
+
+The benchmark above compares wall time for a nominal 2 ps wall-collision
+trajectory. The DFT/MM value is the reported upper-bound runtime from the
+reference calculation; ReaxFF and MACE values are local measured or projected
+benchmarks from the matched workflow.
+
+## Repository Layout
 
 ```text
-manuscript/   LaTeX source, compiled manuscript, and manuscript-used figures
-data/         Retained datasets required by the active figures, tables, and validation
-references/   BibTeX file, literature notes, and source-reference material
-scripts/      Python analysis, plotting, validation, and simulation drivers
-bash/         Shell entry points for simulation workflows
-backup/       Archived drafts, unused figures, old scripts, unused data, and temp files
+assets/                 lightweight README figures
+bash/                   shell entry points for simulation workflows
+data/README.md          local-data inventory; data files are ignored by Git
+references/             BibTeX and literature notes
+scripts/analysis/       validation and analysis code
+scripts/plotting/       plotting scripts for public figures
+scripts/simulation/     ReaxFF and MACE-POLAR simulation drivers and inputs
+environment.yml         starting conda environment
+Makefile                lightweight validation and plotting commands
 ```
 
-## Requirements
-
-Use the conda environment as a starting point:
+## Setup
 
 ```bash
 conda env create -f environment.yml
 conda activate emibf4-benchmark
 ```
 
-Core analysis requires Python, NumPy, pandas, matplotlib, ASE, and networkx.
-Manuscript compilation requires TeX Live with `latexmk`, `elsarticle`,
-`todonotes`, `siunitx`, and standard BibTeX support. Re-running simulations is
-optional and requires the relevant external engines: LAMMPS with ReaxFF support
-for ReaxFF and a current MACE/PyTorch installation for MACE-POLAR-1.
+Core analysis uses Python, NumPy, pandas, matplotlib, ASE, and networkx.
+Optional simulations require external engines: LAMMPS with ReaxFF support for
+ReaxFF cases and a compatible MACE/PyTorch installation for MACE-POLAR-1.
 
-## Reproduce Figures And Tables
+## Lightweight Commands
 
-Run lightweight validation:
+Validate compact result tables when local data are present:
 
 ```bash
 make validate
 ```
 
-Regenerate the manuscript figures:
+Regenerate the README performance benchmark:
 
 ```bash
-make figures
+make benchmark
 ```
 
-Compile the manuscript:
+Run all lightweight checks:
 
 ```bash
-make manuscript
+make all
 ```
 
-The main manuscript entry file is:
-
-```text
-manuscript/manuscript.tex
-```
-
-The active plotting script is:
-
-```text
-scripts/analysis/build_manuscript_figures.py
-```
-
-It writes the manuscript figures directly to `manuscript/figures/`.
+These commands do not launch expensive simulations.
 
 ## Optional Simulation Workflows
 
@@ -85,8 +79,7 @@ Simulation outputs are written under `results/`, which is ignored by Git.
 
 ## Data Policy
 
-`data/` intentionally contains only the datasets needed by the current paper
-figures, tables, and validation checks. Unused exploratory files, older figures,
-raw trajectory sets not needed for active plots, and intermediate outputs were
-moved to `backup/`. See `data/README.md` for retained dataset provenance and
-`organization_report.md` for the move log and validation status.
+The public repository tracks code, small workflow inputs, notes, and lightweight
+figures. Local result tables and trajectories are kept under `data/` and are
+ignored by Git. See `data/README.md` for the expected local data layout and
+which scripts consume each dataset.

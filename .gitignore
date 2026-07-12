@@ -6,7 +6,6 @@ __pycache__/
 results/
 scripts/analysis/comparison_analysis.executed.ipynb
 backup/
-manuscript/
 organization_report.md
 scripts/analysis/build_manuscript_figures.py
 

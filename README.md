@@ -13,6 +13,19 @@ trajectory. The DFT/MM value is the reported upper-bound runtime from the
 reference calculation; ReaxFF and MACE values are local measured or projected
 benchmarks from the matched workflow.
 
+## Repository Layout
+
+```text
+assets/                 lightweight README figures
+bash/                   shell entry points for simulation workflows
+data/README.md          local-data inventory; data files are ignored by Git
+references/             BibTeX and literature notes
+scripts/analysis/       validation and benchmark notebooks
+scripts/plotting/       plotting scripts for public figures
+scripts/simulation/     ReaxFF and MACE-POLAR simulation drivers and inputs
+environment.yml         starting conda environment
+Makefile                lightweight validation and plotting commands
+```
 
 ## Setup
 
@@ -38,6 +51,16 @@ Regenerate the README performance benchmark:
 ```bash
 make benchmark
 ```
+
+Run the fast EMI-BF4 geometry optimization benchmark notebook:
+
+```bash
+jupyter lab scripts/analysis/geometry_optimization_benchmark.ipynb
+```
+
+That notebook compares the tracked starting EMI-BF4 structure against Laws et
+al. DFT geometry metrics and, when MACE is available, optimizes the same
+structure with MACE-medium and MACE-POLAR-1.
 
 Run all lightweight checks:
 

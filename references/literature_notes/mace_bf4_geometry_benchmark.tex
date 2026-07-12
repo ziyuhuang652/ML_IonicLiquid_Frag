@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{amsmath}
+
+\sisetup{
+  detect-all,
+  round-mode=places,
+  round-precision=3
+}
+
+\begin{document}
+
+\section*{BF$_4$ Geometry Benchmark for MACE-Optimized EMI--BF$_4$}
+
+As a fast geometry-level benchmark, the neutral EMI--BF$_4$ starting structure
+used in the wall-collision workflow was optimized with MACE-medium and
+MACE-POLAR-1 and compared with the DFT-optimized and crystallographic
+geometries reported by Laws et al. The most informative discrepancy is the
+anion substructure. In the published DFT geometry, three B--F distances are
+near \SI{1.36}{\text{\AA}}, whereas the fourth distance is elongated to
+\SI{1.703}{\text{\AA}}. The crystallographic reference, by contrast, reports
+four similar B--F distances near \SIrange{1.38}{1.40}{\text{\AA}}. Both
+MACE-medium and MACE-POLAR-1 relax the BF$_4$ unit toward a chemically
+reasonable near-tetrahedral anion, with all four B--F distances between
+approximately \SIrange{1.40}{1.44}{\text{\AA}}. Thus, although the foundation
+models do not reproduce the asymmetric DFT-optimized BF$_4$ distortion, they
+are closer to experiment for the anion bond-length substructure, especially for
+the anomalous B$_1$--F$_4$ coordinate. This supports using the MACE models as
+rapid geometry and trajectory generators while motivating targeted
+DFT-informed fine-tuning before quantitative yield prediction.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of BF$_4$ anion bond lengths in EMI--BF$_4$ from the
+Laws et al. DFT-optimized geometry, experimental crystallography, the tracked
+starting structure, and MACE-optimized geometries. Distances are in
+\si{\text{\AA}}.}
+\label{tab:mace_bf4_geometry_benchmark}
+\begin{tabular}{lccccc}
+\toprule
+Measurement & DFT & Experiment & Input & MACE-medium & MACE-POLAR-1 \\
+\midrule
+B$_1$--F$_1$ & 1.364 & 1.376 & 1.363 & 1.438 & 1.433 \\
+B$_1$--F$_2$ & 1.365 & 1.386 & 1.358 & 1.430 & 1.419 \\
+B$_1$--F$_3$ & 1.378 & 1.391 & 1.342 & 1.402 & 1.371 \\
+B$_1$--F$_4$ & 1.703 & 1.399 & 1.358 & 1.430 & 1.420 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}

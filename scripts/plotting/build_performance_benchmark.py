@@ -12,6 +12,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "benchmarks" / "resource_benchmark.csv"
 OUT = ROOT / "assets" / "performance_benchmark"
+OUT_NO_HF_LABELS = ROOT / "assets" / "performance_benchmark_no_hf_labels"
 Y_FLOOR = 1e-4
 
 
@@ -59,12 +60,11 @@ def format_time(hours: float) -> str:
     return f"{hours * 3600:.2f} s"
 
 
-def main() -> None:
-    configure_style()
+def build_plot(out_stem: Path, show_chemistry_labels: bool, y_upper: float) -> None:
     data = pd.read_csv(DATA)
-    order = ["DFT/QM-MM", "MACE-medium", "MACE-POLAR-1", "ReaxFF"]
-    labels = ["DFT/MM", "MACE-\nMedium", "MACE-\nPolar", "ReaxFF"]
-    colors = ["#4D4D4D", "#0072B2", "#D55E00", "#009E73"]
+    order = ["DFT/QM-MM", "MACE-POLAR-1", "MACE-medium", "ReaxFF"]
+    labels = ["DFT/MM", "MACE-\nPolar", "MACE-\nMedium", "ReaxFF"]
+    colors = ["#4D4D4D", "#D55E00", "#0072B2", "#009E73"]
     chemistry = ["HF", "HF", "HF", "No HF"]
     data = data.set_index("method").loc[order].reset_index()
     hours = data["wall_time_hours_per_2ps_trajectory"].astype(float).to_numpy()
@@ -72,30 +72,31 @@ def main() -> None:
     fig, ax = plt.subplots(figsize=(10.5, 7.0))
     bars = ax.bar(labels, hours, color=colors, edgecolor="black", linewidth=2.0)
     ax.set_yscale("log")
-    ax.set_ylim(Y_FLOOR, 5e3)
+    ax.set_ylim(Y_FLOOR, y_upper)
     ax.set_ylabel("Wall Time / 2 ps Trajectory (h)")
     ax.set_title("Performance Benchmark")
     ax.grid(False)
     ax.tick_params(axis="x", pad=10)
 
     for bar, value, label in zip(bars, hours, chemistry):
-        y_text = 10 ** ((math.log10(max(value, Y_FLOOR)) + math.log10(Y_FLOOR)) / 2)
-        is_reaxff = label == "No HF"
+        if show_chemistry_labels:
+            y_text = 10 ** ((math.log10(max(value, Y_FLOOR)) + math.log10(Y_FLOOR)) / 2)
+            is_reaxff = label == "No HF"
+            ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                y_text,
+                label,
+                ha="center",
+                va="center",
+                rotation=0 if is_reaxff else 90,
+                fontsize=14 if is_reaxff else 22,
+                fontweight="bold",
+                color="white",
+                clip_on=True,
+            )
         ax.text(
             bar.get_x() + bar.get_width() / 2,
-            y_text,
-            label,
-            ha="center",
-            va="center",
-            rotation=0 if is_reaxff else 90,
-            fontsize=14 if is_reaxff else 22,
-            fontweight="bold",
-            color="white",
-            clip_on=True,
-        )
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            value * 1.45,
+            value * 1.75,
             format_time(value),
             ha="center",
             va="bottom",
@@ -104,9 +105,16 @@ def main() -> None:
         )
 
     fig.tight_layout()
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT.with_suffix(".png"), dpi=300)
-    fig.savefig(OUT.with_suffix(".pdf"))
+    out_stem.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_stem.with_suffix(".png"), dpi=300)
+    fig.savefig(out_stem.with_suffix(".pdf"))
+    plt.close(fig)
+
+
+def main() -> None:
+    configure_style()
+    build_plot(OUT, show_chemistry_labels=True, y_upper=5e3)
+    build_plot(OUT_NO_HF_LABELS, show_chemistry_labels=False, y_upper=2e4)
 
 
 if __name__ == "__main__":

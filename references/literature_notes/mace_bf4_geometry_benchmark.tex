@@ -1,9 +1,10 @@
 \documentclass[11pt]{article}
 
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.8in]{geometry}
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{amsmath}
+\usepackage{caption}
 
 \sisetup{
   detect-all,
@@ -13,40 +14,99 @@
 
 \begin{document}
 
-\section*{BF$_4$ Geometry Benchmark for MACE-Optimized EMI--BF$_4$}
+\section*{Geometry Optimization Benchmark for MACE-Optimized EMI--BF$_4$}
 
-As a fast geometry-level benchmark, the neutral EMI--BF$_4$ starting structure
-used in the wall-collision workflow was optimized with MACE-medium and
-MACE-POLAR-1 and compared with the DFT-optimized and crystallographic
-geometries reported by Laws et al. The most informative discrepancy is the
-anion substructure. In the published DFT geometry, three B--F distances are
-near \SI{1.36}{\text{\AA}}, whereas the fourth distance is elongated to
-\SI{1.703}{\text{\AA}}. The crystallographic reference, by contrast, reports
+The neutral EMI--BF$_4$ starting structure used in the wall-collision workflow
+was optimized with MACE-medium and MACE-POLAR-1 and compared against the
+DFT-optimized and crystallographic geometry metrics reported by Laws et al.
+The optimization was deliberately lightweight: a single isolated 24-atom
+EMI--BF$_4$ ion pair was relaxed with each foundation model using a force
+tolerance of \SI{0.03}{eV\per\text{\AA}}. MACE-medium converged in 138 BFGS
+steps with a final force maximum of \SI{0.0239}{eV\per\text{\AA}}, while
+MACE-POLAR-1 converged in 45 BFGS steps with a final force maximum of
+\SI{0.0264}{eV\per\text{\AA}}.
+
+The most important qualitative result is found in the BF$_4$ anion. The
+published DFT geometry reports one strongly elongated B$_1$--F$_4$ distance of
+\SI{1.703}{\text{\AA}}, whereas the experimental crystallographic structure has
 four similar B--F distances near \SIrange{1.38}{1.40}{\text{\AA}}. Both
-MACE-medium and MACE-POLAR-1 relax the BF$_4$ unit toward a chemically
-reasonable near-tetrahedral anion, with all four B--F distances between
-approximately \SIrange{1.40}{1.44}{\text{\AA}}. Thus, although the foundation
-models do not reproduce the asymmetric DFT-optimized BF$_4$ distortion, they
-are closer to experiment for the anion bond-length substructure, especially for
-the anomalous B$_1$--F$_4$ coordinate. This supports using the MACE models as
-rapid geometry and trajectory generators while motivating targeted
-DFT-informed fine-tuning before quantitative yield prediction.
+MACE-medium and MACE-POLAR-1 relax the anion toward a chemically reasonable
+near-tetrahedral geometry, with all four B--F distances between approximately
+\SIrange{1.40}{1.44}{\text{\AA}}. Therefore, while the MACE foundation models
+do not reproduce the asymmetric DFT-optimized BF$_4$ distortion, they are much
+closer to crystallography for the anion bond-length substructure, especially
+for the anomalous B$_1$--F$_4$ coordinate. Across all tabulated bond lengths,
+the mean absolute error relative to the Laws DFT values is
+\SI{0.0797}{\text{\AA}} for MACE-medium and \SI{0.0733}{\text{\AA}} for
+MACE-POLAR-1; across all tabulated angles, the corresponding mean absolute
+errors are \SI{7.19}{\degree} and \SI{6.86}{\degree}. The similarity of these
+aggregate errors reflects the tension between matching the reported DFT
+distortion and matching the crystallographic BF$_4$ geometry. For reactive
+fragmentation workflows, this is a useful sanity check: the MACE models
+preserve chemically reasonable local bonding while providing a rapid starting
+point for future DFT-informed fine-tuning.
 
 \begin{table}[htbp]
 \centering
-\caption{Comparison of BF$_4$ anion bond lengths in EMI--BF$_4$ from the
-Laws et al. DFT-optimized geometry, experimental crystallography, the tracked
-starting structure, and MACE-optimized geometries. Distances are in
-\si{\text{\AA}}.}
-\label{tab:mace_bf4_geometry_benchmark}
+\captionsetup{labelformat=empty}
+\caption{TABLE I. Comparison of DFT optimized EMI--BF$_4$ geometry metrics
+with experimental crystallography measurements at 173~K and with the tracked
+input, MACE-medium optimized, and MACE-POLAR-1 optimized geometries. Bond
+lengths are in \si{\text{\AA}}; angles are in degrees.}
+\label{tab:complete_mace_geometry_benchmark}
+\small
 \begin{tabular}{lccccc}
 \toprule
-Measurement & DFT & Experiment & Input & MACE-medium & MACE-POLAR-1 \\
+Measurement & DFT & Experimental & Input & MACE-medium & MACE-POLAR-1 \\
 \midrule
+\multicolumn{6}{l}{\textbf{Anion bond lengths (\si{\text{\AA}})}} \\
 B$_1$--F$_1$ & 1.364 & 1.376 & 1.363 & 1.438 & 1.433 \\
 B$_1$--F$_2$ & 1.365 & 1.386 & 1.358 & 1.430 & 1.419 \\
 B$_1$--F$_3$ & 1.378 & 1.391 & 1.342 & 1.402 & 1.371 \\
 B$_1$--F$_4$ & 1.703 & 1.399 & 1.358 & 1.430 & 1.420 \\
+\addlinespace
+\multicolumn{6}{l}{\textbf{External anion angles (deg)}} \\
+F$_1$--B$_1$--F$_2$ & 94.0 & 108.7 & 107.0 & 108.7 & 106.8 \\
+F$_1$--B$_1$--F$_3$ & 96.0 & 108.8 & 111.2 & 109.8 & 111.2 \\
+F$_1$--B$_1$--F$_4$ & 96.8 & 109.0 & 107.0 & 108.6 & 106.8 \\
+F$_2$--B$_1$--F$_3$ & 113.9 & 109.5 & 111.6 & 110.5 & 112.0 \\
+F$_2$--B$_1$--F$_4$ & 120.0 & 109.7 & 108.3 & 109.1 & 107.8 \\
+F$_3$--B$_1$--F$_4$ & 123.3 & 111.1 & 111.6 & 110.2 & 111.9 \\
+\addlinespace
+\multicolumn{6}{l}{\textbf{Cation bond lengths (\si{\text{\AA}})}} \\
+N$_1$--C$_2$ & 1.292 & 1.330 & 1.374 & 1.341 & 1.327 \\
+C$_2$--N$_3$ & 1.305 & 1.335 & 1.376 & 1.342 & 1.328 \\
+N$_3$--C$_4$ & 1.346 & 1.361 & 1.406 & 1.392 & 1.378 \\
+C$_4$--C$_5$ & 1.436 & 1.384 & 1.398 & 1.356 & 1.354 \\
+C$_5$--N$_1$ & 1.452 & 1.390 & 1.406 & 1.383 & 1.377 \\
+\addlinespace
+\multicolumn{6}{l}{\textbf{Internal cation angles (deg)}} \\
+C$_5$--N$_1$--C$_2$ & 104.8 & 106.3 & 108.4 & 108.6 & 108.9 \\
+N$_1$--C$_2$--N$_3$ & 106.5 & 107.8 & 108.6 & 108.5 & 108.5 \\
+C$_2$--N$_3$--C$_4$ & 109.2 & 107.8 & 108.4 & 108.4 & 108.8 \\
+N$_3$--C$_4$--C$_5$ & 109.3 & 108.9 & 107.3 & 107.0 & 106.9 \\
+C$_4$--C$_5$--N$_1$ & 110.0 & 109.3 & 107.3 & 107.5 & 106.9 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Mean and maximum absolute deviations from the Laws et al. DFT
+geometry metrics. Bond-length errors are in \si{\text{\AA}}; angle errors are
+in degrees. These statistics quantify agreement with the reported DFT
+geometry, not agreement with crystallography.}
+\label{tab:mace_geometry_error_summary}
+\begin{tabular}{llcc}
+\toprule
+Method & Metric type & Mean absolute error & Maximum absolute error \\
+\midrule
+Input & Bond lengths & 0.076 & 0.345 \\
+Input & Angles & 6.85 & 15.20 \\
+MACE-medium & Bond lengths & 0.080 & 0.273 \\
+MACE-medium & Angles & 7.19 & 14.66 \\
+MACE-POLAR-1 & Bond lengths & 0.073 & 0.283 \\
+MACE-POLAR-1 & Angles & 6.86 & 15.22 \\
 \bottomrule
 \end{tabular}
 \end{table}

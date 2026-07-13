@@ -6,20 +6,12 @@ MACE-POLAR-1. The repository is intended to hold reproducible scripts and clean
 workflow structure; large local datasets, raw trajectories, archived drafts,
 and manuscript files are not tracked.
 
-![Performance benchmark](assets/performance_benchmark.png)
+![Performance benchmark](assets/performance_benchmark_no_hf_labels.png)
 
 The benchmark above compares wall time for a nominal 2 ps wall-collision
 trajectory. The DFT/MM value is the reported upper-bound runtime from the
 reference calculation; ReaxFF and MACE values are local measured or projected
 benchmarks from the matched workflow.
-
-#![173 K BF4 bond distributions](assets/bf4_173K_bond_distribution.png)
-#
-#The 173 K isolated EMI-BF4 test tracks the four B-F distances during short
-#MACE-medium and MACE-POLAR-1 Langevin dynamics. Both foundation models keep
-#the BF4 bond-length distributions near the crystallographic references, while
-#the reported DFT B1-F4 value at 1.703 A lies far outside the sampled thermal
-#distribution.
 
 ## Repository Layout
 
